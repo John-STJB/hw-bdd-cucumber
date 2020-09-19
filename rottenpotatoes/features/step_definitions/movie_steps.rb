@@ -1,12 +1,14 @@
 # Add a declarative step here for populating the DB with movies.
-row = 0
+@row = 0
 Given /the following movies exist/ do |movies_table|
+  row = 1
   movies_table.hashes.each do |movie|
     # each returned element will be a hash whose key is the table header.
     # you should arrange to add that movie to the database here.
     Movie.create(movie)
     row += 1
   end
+  @row = row
   #fail "Unimplemented"
 end
 
@@ -47,7 +49,7 @@ end
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
   
-  expect(page).to have_xpath("//tr", row)
+  expect(page).to have_xpath(".//tr", count: @row)
   
   #Movie.all.each do |movie|
   #  steps %Q{I should see "#{movie.title}"}
